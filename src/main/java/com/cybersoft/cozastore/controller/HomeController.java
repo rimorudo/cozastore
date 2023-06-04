@@ -21,6 +21,7 @@ public class HomeController {
 
     @GetMapping("/category")
     public ResponseEntity<?> getAllCategory(){
+
         BaseResponse response = new BaseResponse();
         response.setData(homeService.getAllCategory());
 
