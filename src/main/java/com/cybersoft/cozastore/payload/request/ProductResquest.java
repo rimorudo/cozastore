@@ -1,15 +1,33 @@
 package com.cybersoft.cozastore.payload.request;
 
 
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.*;
+
 public class ProductResquest {
 
+    @NotNull(message = "File không được phép rỗng")
+    private MultipartFile file;
+
+    @NotBlank(message = "Tên không được rỗng")
     private String name;
+
+    @DecimalMin(value="0.1")
     private double price;
     private String desc;
     private int quantity;
     private int sizeId;
     private int colorId;
     private int categoryId;
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
 
     public String getName() {
         return name;
