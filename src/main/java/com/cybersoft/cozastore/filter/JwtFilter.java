@@ -1,6 +1,6 @@
 package com.cybersoft.cozastore.filter;
 
-import com.cybersoft.cozastore.Util.JWTHelperUtils;
+import com.cybersoft.cozastore.utils.JWTHelperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -16,37 +16,42 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 @Component
+//OncePerRequestFilter : Có request yêu cầu chứng thực thì chạy vào filter
 public class JwtFilter extends OncePerRequestFilter {
 
-    //Buoc 1: Lay token
-    //Buoc 2: Giai ma token
-    //Buoc 3: Token hop le tao chung thuc cho Sercutiry
+//    Bước 1 : Lấy token
+//    Bước 2 : Giải mã token
+//    Bước 3 : Token hợp lệ tạo chứng thực cho Security
+
     @Autowired
     JWTHelperUtils jwtHelperUtils;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // Lay gia tri tren header
+//        Lấy giá trị trên header
         String header = request.getHeader("Authorization");
 
-        //Giai ma token
+//      Kiểm tra token lấy được xem có thể do hệ thống sinh ra hay không
         try{
+            //        Cắt chuỗi bỏ chữ Bearer để lấy đúng token
             String token = header.substring(7);
-
             String data = jwtHelperUtils.validToken(token);
-            // Neu token khac ong tuc la hop le thi tao chung thuc
+//            Nếu token khác rỗng tức là hợp lệ thì tạo chứng thực
             if(!data.isEmpty()){
-                //Tao chung thuc co Security
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("","", new ArrayList<>());
+//          Tạo chứng thực cho Security
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken("","",new ArrayList<>());
                 SecurityContext securityContext = SecurityContextHolder.getContext();
                 securityContext.setAuthentication(authenticationToken);
             }
             System.out.println("Kiem tra " + data);
         }catch (Exception e){
-                System.out.println("Token khong hop le");
+//            Token không hợp lệ
+            System.out.println("token không hợp lệ");
         }
 
-
+//        Cho phép đi vào link người dùng muốn truy cập
         filterChain.doFilter(request,response);
     }
+
 }

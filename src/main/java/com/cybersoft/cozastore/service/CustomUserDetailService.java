@@ -11,25 +11,28 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-
 @Service
-
 public class CustomUserDetailService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
 
+//    Exception : Quăng lỗi và kết thúc code
+//    compare : so sánh
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         UserEntity user = userRepository.findByUsername(username);
 
         if(user == null){
-
-            throw new UsernameNotFoundException("User khong ton tai");
+//            Không tìm thấy user trong hệ thống
+            throw new UsernameNotFoundException("User không tồn tại");
         }else{
-            User user1 = new User(user.getUsername(),user.getPassword(), new ArrayList<>());
+//            Tạo ra user để so sánh chứng thực
+            User user1 = new User(user.getUsername(),user.getPassword(),new ArrayList<>());
             return user1;
         }
+
     }
+
 }
