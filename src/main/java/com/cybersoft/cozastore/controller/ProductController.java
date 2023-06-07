@@ -18,6 +18,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Base64;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/product")
@@ -30,7 +34,6 @@ public class ProductController {
     public ResponseEntity<?> getProductByCategory(@PathVariable int id){
         BaseResponse response = new BaseResponse();
         response.setData(iProductService.getProductByCategoryId(id));
-
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

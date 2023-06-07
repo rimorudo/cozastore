@@ -5,6 +5,7 @@ import com.cybersoft.cozastore.entity.ColorEntity;
 import com.cybersoft.cozastore.entity.ProductEntity;
 import com.cybersoft.cozastore.entity.SizeEntity;
 import com.cybersoft.cozastore.payload.request.ProductResquest;
+import com.cybersoft.cozastore.entity.ProductEntity;
 import com.cybersoft.cozastore.payload.response.ProductResponse;
 import com.cybersoft.cozastore.repository.ProductRepository;
 import com.cybersoft.cozastore.service.imp.IProductService;
