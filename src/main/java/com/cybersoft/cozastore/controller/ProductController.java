@@ -4,12 +4,15 @@ import com.cybersoft.cozastore.payload.request.ProductResquest;
 import com.cybersoft.cozastore.payload.response.BaseResponse;
 import com.cybersoft.cozastore.service.ProductService;
 import com.cybersoft.cozastore.service.imp.IProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Base64;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,8 +34,12 @@ public class ProductController {
     @Autowired
     private IProductService iProductService;
 
+    Logger logger = LoggerFactory.getLogger(ProductController.class);
+
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProductByCategory(@PathVariable int id){
+    public ResponseEntity<?> getProductByCategory(HttpServletRequest request, @PathVariable int id){
+
+
         BaseResponse response = new BaseResponse();
         response.setData(iProductService.getProductByCategoryId(id));
         return new ResponseEntity<>(response, HttpStatus.OK);
