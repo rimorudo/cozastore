@@ -6,7 +6,8 @@ import com.cybersoft.cozastore.payload.response.ProductResponse;
 import java.util.List;
 
 public interface IProductService {
-    List<ProductResponse> getProductByCategoryId(int id);
+    List<ProductResponse> getProductByCategoryId(String hostName, int id);
     boolean addProduct(ProductResquest productResquest);
 
+    ProductResponse getDetailProduct(int id);
 }

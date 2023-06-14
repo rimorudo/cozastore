@@ -37,11 +37,20 @@ public class ProductController {
     Logger logger = LoggerFactory.getLogger(ProductController.class);
 
     @GetMapping("/{id}")
+    public ResponseEntity<?> getDetailProduct(
+        @PathVariable int id
+    ){
+        BaseResponse response = new BaseResponse();
+        response.setData(iProductService.getDetailProduct(id));
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @GetMapping("/cateogry/{id}")
     public ResponseEntity<?> getProductByCategory(HttpServletRequest request, @PathVariable int id){
 
-
+        String hostName = request.getHeader("host");
         BaseResponse response = new BaseResponse();
-        response.setData(iProductService.getProductByCategoryId(id));
+        response.setData(iProductService.getProductByCategoryId(hostName,id));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
