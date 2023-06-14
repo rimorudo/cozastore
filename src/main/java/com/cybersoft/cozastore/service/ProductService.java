@@ -10,10 +10,12 @@ import com.cybersoft.cozastore.payload.response.ProductResponse;
 import com.cybersoft.cozastore.repository.ProductRepository;
 import com.cybersoft.cozastore.service.imp.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService implements IProductService {
@@ -21,15 +23,18 @@ public class ProductService implements IProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Value("${host.name}")
+    private String hostName;
+
     @Override
-    public List<ProductResponse> getProductByCategoryId(int id) {
+    public List<ProductResponse> getProductByCategoryId(String hostName, int id) {
         List<ProductEntity> list = productRepository.findByCategoryId(id);
         List<ProductResponse> productResponseList = new ArrayList<>();
 
         for (ProductEntity data : list) {
             ProductResponse productResponse = new ProductResponse();
             productResponse.setName(data.getName());
-            productResponse.setImage(data.getImage());
+            productResponse.setImage("http://" + hostName + "/product/file/" + data.getImage());
             productResponse.setPrice(data.getPrice());
 
             productResponseList.add(productResponse);
@@ -65,5 +70,26 @@ public class ProductService implements IProductService {
         }catch (Exception e){
             return false;
         }
+    }
+
+    @Override
+    public ProductResponse getDetailProduct(int id) {
+        Optional<ProductEntity> product = productRepository.findById(id);
+        ProductResponse productResponse = new ProductResponse();
+        if(product.isPresent()){
+            productResponse.setId(product.get().getId());
+            productResponse.setImage((product.get().getImage()));
+            productResponse.setPrice(product.get().getPrice());
+            productResponse.setName(product.get().getName());
+            productResponse.setDescription(product.get().getDescription());
+        }
+
+        /**
+         * Optional: kieu du lieu giup tranh truong hop doi tuong bi null hoac rong
+         * isPresent: Kiem tra doi tuong cho du lieu hay khong, nen su dung cho doi tuong
+         * .get(): giup huy optional di
+         */
+
+        return productResponse;
     }
 }
